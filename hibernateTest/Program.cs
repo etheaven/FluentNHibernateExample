@@ -104,41 +104,9 @@ namespace hibernateTest
         public class SessionFactoryBuilder
         {
 
-            //var listOfEntityMap = typeof(M).Assembly.GetTypes().Where
-            //(t => t.GetInterfaces().Contains(typeof(M))).ToList();
-            //var sessionFactory = SessionFactoryBuilder.BuildSessionFactory
-            //(dbmsTypeAsString, connectionStringName, listOfEntityMap, withLog, create, update); 
-
             public static ISessionFactory BuildSessionFactory
                 (string connectionStringName, bool create = false, bool update = false)
             {
-                /*var fluentConfiguration = Fluently.Configure()
-                    .Database(MySQLConfiguration.Standard // change sql here
-                        .ConnectionString(ConfigurationManager.ConnectionStrings[connectionStringName]
-                            .ConnectionString));
-                var exposeConfiguration = fluentConfiguration
-//                    .Mappings(m => entityMappingTypes.ForEach(e => { m.FluentMappings.Add(e); }))
-                    .Mappings(m => m.FluentMappings.AddFromAssemblyOf<NHibernate.Cfg.Mappings>())
-                    .CurrentSessionContext("call")
-                    .ExposeConfiguration(cfg => BuildSchema(cfg, create, update));
-                var buildSessionFactory = exposeConfiguration
-                    .BuildSessionFactory();
-                return buildSessionFactory;*/
-
-                
-                
-
-                /*ISessionFactory sessionFactory = Fluently.Configure()
-                    .Database(MySQLConfiguration.Standard // change sql here
-                        .ConnectionString(
-                        ConfigurationManager.ConnectionStrings[connectionStringName]
-                            .ConnectionString).ShowSql())
-                    .Mappings(m =>
-                        m.FluentMappings.AddFromAssemblyOf<Program>())
-                    .ExposeConfiguration(cfg => new SchemaExport(cfg)
-
-                        .Create(false, true))
-                    .BuildSessionFactory();*/
 
                 var configuration = Fluently.Configure()
                 .Database(MySQLConfiguration.Standard.ConnectionString(
@@ -151,21 +119,6 @@ namespace hibernateTest
                 exporter.Execute(true, true, false);
 
                 ISessionFactory sessionFactory = configuration.BuildSessionFactory();
-
-                /*
-                ISessionFactory sessionFactory = Fluently.Configure()
-
-                    .Database(MySQLConfiguration.Standard // change sql here
-                        .ConnectionString(ConfigurationManager.ConnectionStrings[connectionStringName]
-                            .ConnectionString).ShowSql())
-                    .Mappings(m => m.FluentMappings
-                        .AddFromAssemblyOf<TaskMap>()
-                        .AddFromAssemblyOf<PersonMap>())
-                    .ExposeConfiguration(cfg => new SchemaExport(cfg)
-
-                        .Create(false, false))
-
-                    .BuildSessionFactory();*/
                 return sessionFactory;
             }
 
