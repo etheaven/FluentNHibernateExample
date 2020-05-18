@@ -128,17 +128,29 @@ namespace hibernateTest
                 
                 
 
-                ISessionFactory sessionFactory = Fluently.Configure()
-
+                /*ISessionFactory sessionFactory = Fluently.Configure()
                     .Database(MySQLConfiguration.Standard // change sql here
-                        .ConnectionString(ConfigurationManager.ConnectionStrings[connectionStringName]
+                        .ConnectionString(
+                        ConfigurationManager.ConnectionStrings[connectionStringName]
                             .ConnectionString).ShowSql())
                     .Mappings(m =>
                         m.FluentMappings.AddFromAssemblyOf<Program>())
                     .ExposeConfiguration(cfg => new SchemaExport(cfg)
 
                         .Create(false, true))
-                    .BuildSessionFactory();
+                    .BuildSessionFactory();*/
+
+                var configuration = Fluently.Configure()
+                .Database(MySQLConfiguration.Standard.ConnectionString(
+                        ConfigurationManager.ConnectionStrings[connectionStringName]
+                            .ConnectionString).ShowSql)
+                .Mappings(m => m.FluentMappings.AddFromAssemblyOf<Program>())
+                .BuildConfiguration();
+
+                var exporter = new SchemaExport(configuration);
+                exporter.Execute(true, true, false);
+
+                ISessionFactory sessionFactory = configuration.BuildSessionFactory();
 
                 /*
                 ISessionFactory sessionFactory = Fluently.Configure()
